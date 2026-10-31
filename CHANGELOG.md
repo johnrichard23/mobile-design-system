@@ -2,6 +2,12 @@
 
 Versions follow `MAJOR.MINOR.PATCH`. See "Versions and changes" in the README.
 
+## 0.2.0
+
+- **Type scale:** `TextSpec` takes a `design` (`.serif`, `.rounded`,
+  `.monospaced`) for a role drawn in the system font. Existing code is
+  unchanged; the default is the regular system design.
+
 ## 0.1.0
 
 First release.

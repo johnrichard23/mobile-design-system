@@ -79,19 +79,24 @@ public extension DesignSystem {
         public var weight: Font.Weight
         /// Emphasized weight. Emphasis changes weight, never size.
         public var emphasizedWeight: Font.Weight
+        /// The system font's design (`.serif`, `.rounded`, `.monospaced`).
+        /// Applies to San Francisco only; a custom family ignores it.
+        public var design: Font.Design
 
         public init(
             size: CGFloat,
             lineHeight: CGFloat,
             tracking: CGFloat? = nil,
             weight: Font.Weight = .regular,
-            emphasizedWeight: Font.Weight = .semibold
+            emphasizedWeight: Font.Weight = .semibold,
+            design: Font.Design = .default
         ) {
             self.size = size
             self.lineHeight = lineHeight
             self.tracking = tracking
             self.weight = weight
             self.emphasizedWeight = emphasizedWeight
+            self.design = design
         }
 
         /// The weight to draw, one step heavier when the user turns on Bold Text.
@@ -272,13 +277,28 @@ extension DesignSystem.TextRole {
             naturalLineHeight = UIFont(name: fontName, size: scaledSize)?.lineHeight
                 ?? scaledSize * 1.2
         } else {
-            font = .system(size: scaledSize, weight: weight)
-            naturalLineHeight = UIFont.systemFont(ofSize: scaledSize).lineHeight
+            font = .system(size: scaledSize, weight: weight, design: spec.design)
+            naturalLineHeight = Self.systemFont(size: scaledSize, design: spec.design).lineHeight
         }
         return ResolvedText(
             font: font,
             lineSpacing: max(0, scaledLineHeight - naturalLineHeight),
             tracking: spec.tracking
         )
+    }
+
+    /// The system font in a design, for measuring its natural line height.
+    private static func systemFont(size: CGFloat, design: Font.Design) -> UIFont {
+        let base = UIFont.systemFont(ofSize: size)
+        let uiDesign: UIFontDescriptor.SystemDesign? = switch design {
+        case .serif: .serif
+        case .rounded: .rounded
+        case .monospaced: .monospaced
+        default: nil
+        }
+        guard let uiDesign,
+              let descriptor = base.fontDescriptor.withDesign(uiDesign)
+        else { return base }
+        return UIFont(descriptor: descriptor, size: size)
     }
 }
