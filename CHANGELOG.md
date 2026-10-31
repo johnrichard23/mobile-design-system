@@ -7,6 +7,7 @@ Versions follow `MAJOR.MINOR.PATCH`. See "Versions and changes" in the README.
 - **Type scale:** `TextSpec` takes a `design` (`.serif`, `.rounded`,
   `.monospaced`) for a role drawn in the system font. Existing code is
   unchanged; the default is the regular system design.
+- **Buttons:** a kind's `colors` is public, so an app can check its contrast.
 
 ## 0.1.0
 

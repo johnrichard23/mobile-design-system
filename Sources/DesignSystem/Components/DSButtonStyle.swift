@@ -49,7 +49,8 @@ public extension DesignSystem {
     /// What a button does, as its colours from the theme. One `.primary` per
     /// screen. Add project kinds as static members (see the file header).
     struct ButtonKind: Sendable {
-        let colors: @Sendable (Theme) -> ButtonColors
+        /// The kind's colours in a theme. Public so an app can check them (contrast, for example).
+        public let colors: @Sendable (Theme) -> ButtonColors
 
         public init(colors: @escaping @Sendable (Theme) -> ButtonColors) {
             self.colors = colors
